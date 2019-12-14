@@ -148,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
             }
             Intent contentSelectionIntent = new Intent(Intent.ACTION_GET_CONTENT);
             contentSelectionIntent.addCategory(Intent.CATEGORY_OPENABLE);
-            contentSelectionIntent.setType("image/*");
+            contentSelectionIntent.setType("*/*");
             Intent[] intentArray;
             if (takePictureIntent != null) {
                 intentArray = new Intent[]{takePictureIntent};
@@ -157,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
             }
             Intent chooserIntent = new Intent(Intent.ACTION_CHOOSER);
             chooserIntent.putExtra(Intent.EXTRA_INTENT, contentSelectionIntent);
-            chooserIntent.putExtra(Intent.EXTRA_TITLE, "Image Chooser");
+            chooserIntent.putExtra(Intent.EXTRA_TITLE, getResources().getString(R.string.app_name)+" Choose");
             chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentArray);
             startActivityForResult(chooserIntent, INPUT_FILE_REQUEST_CODE);
             return true;
