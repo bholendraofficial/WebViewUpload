@@ -27,10 +27,10 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class MainActivity extends AppCompatActivity {
+public class WebViewUpload extends AppCompatActivity {
     private static final int INPUT_FILE_REQUEST_CODE = 1;
     private static final int FILECHOOSER_RESULTCODE = 1;
-    private static final String TAG = MainActivity.class.getSimpleName();
+    private static final String TAG = WebViewUpload.class.getSimpleName();
     private WebView webView;
     private WebSettings webSettings;
     private ValueCallback<Uri> mUploadMessage;
@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_webview_upload);
         webView = (WebView) findViewById(R.id.webview);
         webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
         } else if (Build.VERSION.SDK_INT >= 11 && Build.VERSION.SDK_INT < 19) {
             webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         }
-        webView.loadUrl("https://androidexample.com/media/webview/details.html"); //change with your website
+        webView.loadUrl("https://google.com"); //change with your website
     }
 
     private File createImageFile() throws IOException {
@@ -251,7 +251,7 @@ public class MainActivity extends AppCompatActivity {
             // Then show progress  Dialog
             // in standard case YourActivity.this
             if (progressDialog == null) {
-                progressDialog = new ProgressDialog(MainActivity.this);
+                progressDialog = new ProgressDialog(WebViewUpload.this);
                 progressDialog.setMessage("Loading...");
                 progressDialog.show();
             }
