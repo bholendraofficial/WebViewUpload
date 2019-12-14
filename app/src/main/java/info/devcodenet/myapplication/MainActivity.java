@@ -1,4 +1,5 @@
 package info.devcodenet.myapplication;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -25,6 +26,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
 public class MainActivity extends AppCompatActivity {
     private static final int INPUT_FILE_REQUEST_CODE = 1;
     private static final int FILECHOOSER_RESULTCODE = 1;
@@ -35,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private Uri mCapturedImageURI = null;
     private ValueCallback<Uri[]> mFilePathCallback;
     private String mCameraPhotoPath;
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -86,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
         }
         return;
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,12 +103,12 @@ public class MainActivity extends AppCompatActivity {
         webView.setWebChromeClient(new ChromeClient());
         if (Build.VERSION.SDK_INT >= 19) {
             webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
-        }
-        else if(Build.VERSION.SDK_INT >=11 && Build.VERSION.SDK_INT < 19) {
+        } else if (Build.VERSION.SDK_INT >= 11 && Build.VERSION.SDK_INT < 19) {
             webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         }
         webView.loadUrl("https://androidexample.com/media/webview/details.html"); //change with your website
     }
+
     private File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -118,6 +122,18 @@ public class MainActivity extends AppCompatActivity {
         );
         return imageFile;
     }
+
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        // Check if the key event was the Back button and if there's history
+        if ((keyCode == KeyEvent.KEYCODE_BACK) && webView.canGoBack()) {
+            webView.goBack();
+            return true;
+        }
+        // If it wasn't the Back key or there's no web page history, bubble up to the default
+        // system behavior (probably exit the activity)
+        return super.onKeyDown(keyCode, event);
+    }
+
     public class ChromeClient extends WebChromeClient {
         // For Android 5.0
         public boolean onShowFileChooser(WebView view, ValueCallback<Uri[]> filePath, WebChromeClient.FileChooserParams fileChooserParams) {
@@ -157,11 +173,12 @@ public class MainActivity extends AppCompatActivity {
             }
             Intent chooserIntent = new Intent(Intent.ACTION_CHOOSER);
             chooserIntent.putExtra(Intent.EXTRA_INTENT, contentSelectionIntent);
-            chooserIntent.putExtra(Intent.EXTRA_TITLE, getResources().getString(R.string.app_name)+" Choose");
+            chooserIntent.putExtra(Intent.EXTRA_TITLE, getResources().getString(R.string.app_name) + " Choose");
             chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentArray);
             startActivityForResult(chooserIntent, INPUT_FILE_REQUEST_CODE);
             return true;
         }
+
         // openFileChooser for Android 3.0+
         public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType) {
             mUploadMessage = uploadMsg;
@@ -192,14 +209,16 @@ public class MainActivity extends AppCompatActivity {
             Intent chooserIntent = Intent.createChooser(i, "Image Chooser");
             // Set camera intent to file chooser
             chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS
-                    , new Parcelable[] { captureIntent });
+                    , new Parcelable[]{captureIntent});
             // On select image call onActivityResult method of activity
             startActivityForResult(chooserIntent, FILECHOOSER_RESULTCODE);
         }
+
         // openFileChooser for Android < 3.0
         public void openFileChooser(ValueCallback<Uri> uploadMsg) {
             openFileChooser(uploadMsg, "");
         }
+
         //openFileChooser for other Android versions
         public void openFileChooser(ValueCallback<Uri> uploadMsg,
                                     String acceptType,
@@ -207,18 +226,10 @@ public class MainActivity extends AppCompatActivity {
             openFileChooser(uploadMsg, acceptType);
         }
     }
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        // Check if the key event was the Back button and if there's history
-        if ((keyCode == KeyEvent.KEYCODE_BACK) && webView.canGoBack()) {
-            webView.goBack();
-            return true;
-        }
-        // If it wasn't the Back key or there's no web page history, bubble up to the default
-        // system behavior (probably exit the activity)
-        return super.onKeyDown(keyCode, event);
-    }
+
     public class Client extends WebViewClient {
         ProgressDialog progressDialog;
+
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
             // If url contains mailto link then open Mail Intent
             if (url.contains("mailto:")) {
@@ -228,12 +239,13 @@ public class MainActivity extends AppCompatActivity {
                         new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
                 // Here we can open new activity
                 return true;
-            }else {
+            } else {
                 // Stay within this webview and load url
                 view.loadUrl(url);
                 return true;
             }
         }
+
         //Show loader on url load
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             // Then show progress  Dialog
@@ -244,6 +256,7 @@ public class MainActivity extends AppCompatActivity {
                 progressDialog.show();
             }
         }
+
         // Called when all page resources loaded
         public void onPageFinished(WebView view, String url) {
             try {
